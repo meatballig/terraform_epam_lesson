@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     docker = {
-      source = "kreuzwerker/docker"
+      source  = "kreuzwerker/docker"
       version = "2.16.0"
     }
   }
@@ -15,10 +15,10 @@ resource "docker_image" "nodered_image" {
 resource "docker_container" "nodered_container" {
   count = 2
   image = docker_image.nodered_image.latest
-  name  = join("-",["nodered",random_string.random[count.index].result])
+  name  = join("-", ["nodered", random_string.random[count.index].result])
   ports {
     internal = 1880
-   # external = 1881
+    # external = 1881
   }
 }
 
@@ -33,23 +33,23 @@ resource "docker_container" "nodered_container" {
 #
 
 resource "random_string" "random" {
-  count = 2
-  length = 4
+  count   = 2
+  length  = 4
   special = false
-  upper = false
+  upper   = false
 }
 
 
 output "info1" {
-  value = join(" - ",[docker_container.nodered_container[0].ip_address, docker_container.nodered_container[0].name])
-} 
+  value = join(" - ", [docker_container.nodered_container[0].ip_address, docker_container.nodered_container[0].name])
+}
 
 output "info2" {
-  value = join(" - ",[docker_container.nodered_container[1].ip_address, docker_container.nodered_container[1].name])
+  value = join(" - ", [docker_container.nodered_container[1].ip_address, docker_container.nodered_container[1].name])
 }
 
 output "all_info" {
-  value = [for i in docker_container.nodered_container[*]: join(":",[i.name],[i.ip_address],i.ports[*]["external"])]
+  value       = [for i in docker_container.nodered_container[*] : join(":", [i.name], [i.ip_address], i.ports[*]["external"])]
   description = "all_info: name, ip_address, ports"
 }
 
