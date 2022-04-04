@@ -8,17 +8,32 @@ terraform {
 }
 
 
+#variable "external_port" {
+#type = number
+#default = "1680"
+#}
+
+#variable "internal_port" {
+#type = number
+#default = "1600"
+#}
+
+#variable "count_docker" {
+#type = number
+#default = "2"
+#}
+
 resource "docker_image" "nodered_image" {
   name = "nodered/node-red:latest"
 }
 
 resource "docker_container" "nodered_container" {
-  count = 2
+  count = var.count_docker
   image = docker_image.nodered_image.latest
   name  = join("-",["nodered",random_string.random[count.index].result])
   ports {
-    internal = 1880
-   # external = 1881
+    internal = var.internal_port
+    external = var.external_port
   }
 }
 

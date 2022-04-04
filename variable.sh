@@ -1,0 +1,2 @@
+export TF_VAR_external_port=1580
+terraform apply
