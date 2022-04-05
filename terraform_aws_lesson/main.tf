@@ -1,15 +1,11 @@
 
 
 
-
-
-
-
 resource "aws_instance" "my_web_server" {
   count = 1
   ami = "ami-04505e74c0741db8d"
   instance_type = "t2.micro"
-  
+  key_name = "terraform2"  
   tags = {
   Name = "My test instance"
   }
@@ -45,6 +41,13 @@ ingress {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+ingress {
+    description      = "ssh"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
 
 
   egress {
@@ -56,7 +59,7 @@ ingress {
 
   tags = {
     
-Name = "allow_https_http"
+Name = "allow_https_http_ssh"
   }
 
 }
