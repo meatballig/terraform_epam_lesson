@@ -3,7 +3,7 @@
 
 resource "aws_instance" "my_web_server" {
   count = 1
-  ami = "ami-04505e74c0741db8d"
+  ami = "ami-0c02fb55956c7d316"
   instance_type = "t2.micro"
   key_name = "terraform2"  
   tags = {
@@ -12,12 +12,13 @@ resource "aws_instance" "my_web_server" {
   vpc_security_group_ids = [aws_security_group.my_web_server.id]
   user_data = <<EEOOFF
 #!/bin/bash
+set -x
 apt-get -y update
-apt-get -y install httpd
+apt-get -y install apache2
 myip='curl http://169.254.169.254/latest/meta-data/local-ipv4'
 echo "<h2>WebServer with IP $myip</h2><br>Build by Terraform!!!" > /var/www/html/index.html
-sudo service httpd start
-chkconfig httpd on
+sudo service apache2 start
+chkconfig apache2 on
 EEOOFF
 }
 
